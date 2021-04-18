@@ -1,0 +1,28 @@
+import cv2 
+import os
+import time
+import uuid
+
+IMAGES_PATH= 'E:\denemeimg'
+
+
+
+labels= ['openhand', 'punch']
+num_imgs= 15
+
+
+for label in labels:
+    !mkdir {'E:\denemeimg\\'+label}  #Her label için ayrı bir dosya oluşturmamız gerekiyor karışmasın diye.
+    cap= cv2.VideoCapture(0) #Pc kamerasını kullanmak için yazdık. 
+    print('Resimler {} dosyası için toplanıyor...'.format(label)) #Farklı bir labela geçtiğimizi ekranda görelim diye bastırdık.
+    time.sleep(5) #Labellar arası bir uyuma süresi koyduk çünkü ona göre elimizin hareketini değiştirelim.
+    for imgnum in range(num_imgs):
+        ret, frame =cap.read()
+        imagename=os.path.join(IMAGES_PATH,label,label+'.'+'{}.jpg'.format(str(uuid.uuid1()))) #Resimlerin isimleri için.
+        cv2.imwrite(imagename,frame) #cv2 ile dosyaları yazdırmak için kodladık.
+        cv2.imshow('frame',frame) # pop up kameranın üstünde yaı yasması için.
+        time.sleep(2) # Her resimden sonra elin konumunu veya şeklini değiştirmek için yazdk.
+        if cv2.waitKey(1) & 0xFF == ord('q'): break # Resimler bittiğinde q ya basarak kamerayı kapatabiliriz.
+        
+    cap.release()
+        
